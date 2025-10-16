@@ -1,0 +1,11 @@
+# Nextflow work/cache and reports generated locally
+.work/
+.cache/
+reports/
+*.html
+trace.txt
+timeline.html
+report.html
+.nf-test/
+.nextflow*
+.DS_Store

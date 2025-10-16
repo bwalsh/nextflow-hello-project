@@ -1,0 +1,48 @@
+name: nextflow-hello-on-push
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'pipelines/hello/**'
+      - '.github/workflows/hello-on-push.yml'
+
+jobs:
+  hello:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java (Temurin 17)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Install Nextflow
+        run: |
+          curl -fsSL https://get.nextflow.io | bash
+          sudo mv nextflow /usr/local/bin/nextflow
+          nextflow -version
+
+      - name: Run Hello World (local executor)
+        run: |
+          nextflow run pipelines/hello -profile local             -with-report report.html             -with-timeline timeline.html             -with-trace trace.txt
+
+      - name: Upload Nextflow Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: nextflow-hello-reports
+          path: |
+            report.html
+            timeline.html
+            trace.txt
+
+      - name: Upload Hello Output
+        uses: actions/upload-artifact@v4
+        with:
+          name: nextflow-hello-output
+          path: hello.txt
+          if-no-files-found: ignore
