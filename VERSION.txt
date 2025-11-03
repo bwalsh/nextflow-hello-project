@@ -1,2 +1,2 @@
 # a misc text file. Change anything here and commit.  Should fire "on-push" event
-release: 5
+release: 6
